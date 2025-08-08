@@ -14,6 +14,9 @@ O sistema permite criar, listar, atualizar e excluir chamados.
 - **Maven**
 - Spring Boot DevTools (hot reload)
 
+## 🛠 Ferramentas
+- Postman; Teste e documentação de APIs
+
 ## 📌 Funcionalidades
 - Criar novo ticket de suporte
 - Listar todos os tickets
