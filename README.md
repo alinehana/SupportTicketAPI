@@ -1,50 +1,71 @@
-🎫 SupportTicketAPI
+# 🎫 SupportTicketAPI
+API REST em **Spring Boot** para gerenciamento de chamados de suporte.  
+Permite **criar, listar, atualizar e excluir** tickets armazenados em banco de dados SQL.  
 
-API REST em Spring Boot para gerenciamento de chamados de suporte.
-Permite criar, listar, atualizar e excluir tickets armazenados em banco de dados SQL.
+---
 
-🚀 Tecnologias
+### 🎯 Objetivo Geral
+Oferecer uma solução backend para registro e controle de chamados de suporte, garantindo organização, rastreabilidade e padronização das operações CRUD.  
 
-☕ Java 21
+---
 
-🍃 Spring Boot (Web, Data JPA, Validation, DevTools)
+### 🚀 Tecnologias Utilizadas
+- ☕ Java 21
+- 🍃 Spring Boot (Web, Data JPA, Validation, DevTools)
+- 🐘 PostgreSQL
+- 🧰 Lombok
+- 📦 Maven
 
-🐘 PostgreSQL
+---
 
-🧰 Lombok
+### 🛠 Ferramentas
+- Postman / Insomnia (teste de endpoints)
+- Git e GitHub
+- IDE (IntelliJ / STS / Eclipse)
+- PgAdmin (gerenciamento do banco)
 
-📦 Maven
+---
 
-📂 Estrutura
+### 🔌 Como funciona a API SupportTicketAPI
+O sistema segue o fluxo típico de uma **API RESTful**:  
 
-O projeto segue a arquitetura em camadas:
+1. **Recepção da requisição**  
+   - O cliente envia uma requisição HTTP para o endpoint no `ChamadoController`.  
 
-Model → representa a entidade Chamado.
+2. **Validação e conversão**  
+   - Os dados recebidos são encapsulados em um `ChamadoRequestDTO`, que aplica validações via **Spring Validation**.  
 
-DTO → recebe dados da requisição (ChamadoRequestDTO).
+3. **Regras de negócio**  
+   - O `ChamadoService` processa a lógica de negócio.  
 
-Repository → interface JPA para persistência.
+4. **Persistência**  
+   - O `ChamadoRepository` utiliza **Spring Data JPA** para salvar ou recuperar dados.  
 
-Service → contém as regras de negócio.
+5. **Resposta**  
+   - O `ChamadoController` retorna a resposta adequada (`200 OK`, `201 Created`, `204 No Content`).  
 
-Controller → expõe os endpoints REST.
+---
 
-📌 Controller
+### 📌 Funcionalidades
+✅ Criar novo chamado
 
-O ChamadoController é o ponto de entrada da API:
+✅ Listar chamados (com filtro por título)
 
-@RestController
-@RequestMapping("/chamados")
-public class ChamadoController {
-    @Autowired
-    private ChamadoService chamadoService;
+✅ Atualizar chamado existente
 
-➕ Criar chamado
+✅ Excluir chamado
+
+---
+
+### 📌 Exemplos de Endpoints  
+
+## ➕ Criar chamado  
+```java
 @PostMapping
 public ResponseEntity<Chamado> insert(
         @RequestBody @Valid ChamadoRequestDTO chamadoRequestDTO,
         UriComponentsBuilder builder) {
-
+    
     Chamado chamado = new Chamado(chamadoRequestDTO);
     chamado = chamadoService.insert(chamado);
 
@@ -54,32 +75,46 @@ public ResponseEntity<Chamado> insert(
 
     return ResponseEntity.created(uri).body(chamado);
 }
+```
 
+---
 
-📌 Cria um novo chamado e retorna 201 Created com a URI do recurso.
-
-📋 Listar chamados
+## 📋 Listar chamados
+```java
 @GetMapping
 public ResponseEntity<List<Chamado>> findAll(
         @RequestParam(value = "titulo", required = false) String titulo) {
     List<Chamado> retorno = chamadoService.findAll(titulo);
     return ResponseEntity.ok(retorno);
 }
+```
 
+📌 Lista todos os chamados ou filtra por título.
+Exemplo de chamada:
 
-📌 Lista todos os chamados ou filtra por título (GET /chamados?titulo=login).
+GET /chamados
+GET /chamados?titulo=erro
 
-❌ Deletar chamado
+---
+
+## ❌ Excluir chamado
+```java
 @DeleteMapping("{id}")
 public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
     chamadoService.delete(id);
     return ResponseEntity.noContent().build();
 }
-
+```
 
 📌 Remove um chamado pelo id e retorna 204 No Content.
+Exemplo de chamada:
 
-✏️ Atualizar chamado
+DELETE /chamados/1
+
+---
+
+## ✏️ Atualizar chamado
+```java
 @PutMapping("{id}")
 public ResponseEntity<Chamado> update(
         @PathVariable Long id,
@@ -90,6 +125,9 @@ public ResponseEntity<Chamado> update(
 
     return ResponseEntity.ok(chamado);
 }
+```
 
+📌 Atualiza os dados de um chamado existente e retorna 200 OK com o objeto atualizado.
+Exemplo de chamada:
 
-📌 Atualiza os dados de um chamado existente e retorna o objeto atualizado.
+PUT /chamados/1
